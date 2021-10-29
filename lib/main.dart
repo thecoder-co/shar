@@ -1,5 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:shar/login/login_page.dart';
+
+import 'package:get/get.dart';
+import 'package:shar/send_message/find_user.dart';
+import 'package:shar/send_message/send_message.dart';
+import 'package:shar/signup/opening_page.dart';
+import 'package:shar/user_page/user_page.dart';
+import 'package:shar/util/shared_preference.dart';
 
 void main() {
   runApp(MyApp());
@@ -8,60 +16,32 @@ void main() {
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return GetMaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
-          primarySwatch: Colors.indigo,
-          accentColor: Color.fromRGBO(213, 41, 65, 1),
-          textTheme: TextTheme()),
-      home: LoginPage(),
-    );
-  }
-}
-
-class MyHomePage extends StatefulWidget {
-  MyHomePage({Key? key, required this.title}) : super(key: key);
-
-  final String title;
-
-  @override
-  _MyHomePageState createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
-
-  void _incrementCounter() {
-    setState(() {
-      _counter++;
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.title),
+        primarySwatch: Colors.indigo,
+        accentColor: Color.fromRGBO(213, 41, 65, 1),
+        textTheme: TextTheme(),
       ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Text(
-              'You have pushed the button this many times:',
-            ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headline4,
-            ),
-          ],
-        ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: Icon(Icons.add),
-      ),
+      home: FutureBuilder(
+          future: UserPreferences().isLoggedIn(),
+          builder: (context, snapshot) {
+            switch (snapshot.connectionState) {
+              case ConnectionState.none:
+              case ConnectionState.waiting:
+                return CircularProgressIndicator();
+              default:
+                if (snapshot.hasError) {
+                  return Text(
+                    'Error: ${snapshot.error}',
+                    style: GoogleFonts.getFont('Overlock'),
+                  );
+                } else if (snapshot.data == false) {
+                  return OpenPage();
+                }
+                return MainUserPage();
+            }
+          }),
     );
   }
 }

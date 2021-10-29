@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:shar/components/already_have_an_account_acheck.dart';
 import 'package:shar/components/global_widgets.dart';
 import 'package:shar/components/rounded_button.dart';
 import 'package:shar/components/rounded_input_field.dart';
 import 'package:shar/components/rounded_password_field.dart';
+import 'package:shar/logic/apis/register.dart';
 import 'package:shar/login/login_page.dart';
 
 class SignupPage extends StatefulWidget {
@@ -17,6 +19,9 @@ class SignupPage extends StatefulWidget {
 class _SignupPageState extends State<SignupPage> {
   @override
   Widget build(BuildContext context) {
+    String username = '';
+    String password = '';
+    String passwordConfirmation = '';
     return SafeArea(
       child: Scaffold(
         body: Container(
@@ -44,8 +49,8 @@ class _SignupPageState extends State<SignupPage> {
                   ClipRRect(
                     borderRadius: BorderRadius.circular(100),
                     child: CircleAvatar(
-                      child: Image.network(
-                        'https://ps.w.org/simple-user-avatar/assets/icon-256x256.png?rev=2413146',
+                      child: Image.asset(
+                        'asset/avatar.png',
                       ),
                       radius: 60,
                     ),
@@ -63,20 +68,47 @@ class _SignupPageState extends State<SignupPage> {
                   Spacer(),
                   RoundedInputField(
                     hintText: 'Username',
+                    onChanged: (value) {
+                      username = value;
+                    },
                   ),
-                  RoundedPasswordField(),
+                  RoundedPasswordField(
+                    text: 'Password',
+                    onChanged: (value) {
+                      password = value;
+                    },
+                  ),
+                  RoundedPasswordField(
+                    text: 'Password Confirmation',
+                    onChanged: (value) {
+                      passwordConfirmation = value;
+                    },
+                  ),
                   RoundedButton(
                     text: 'Register',
-                    press: () {},
+                    press: () {
+                      if (password == passwordConfirmation) {
+                        print(passwordConfirmation);
+                        print(username);
+                        Future data =
+                            register(password: password, username: username);
+                      } else {
+                        Get.snackbar(
+                          'Error',
+                          "Passwords do not match",
+                          margin: EdgeInsets.all(20),
+                          duration: Duration(milliseconds: 2000),
+                          colorText: Colors.white,
+                          snackStyle: SnackStyle.FLOATING,
+                        );
+                      }
+                    },
                   ),
                   SizeHeight5(),
                   AlreadyHaveAnAccountCheck(
                     login: false,
                     press: () {
-                      Navigator.of(context).pushAndRemoveUntil(
-                        MaterialPageRoute(builder: (builder) => LoginPage()),
-                        (route) => false,
-                      );
+                      Get.off(() => LoginPage());
                     },
                   )
                 ],

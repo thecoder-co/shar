@@ -6,21 +6,21 @@ import 'package:shar/components/global_widgets.dart';
 import 'package:shar/components/rounded_button.dart';
 import 'package:shar/components/rounded_input_field.dart';
 import 'package:shar/components/rounded_password_field.dart';
-import 'package:shar/logic/apis/login.dart';
+import 'package:shar/logic/apis/register.dart';
+import 'package:shar/login/login_page.dart';
+import 'package:shar/send_message/find_user.dart';
 import 'package:shar/signup/signup_page.dart';
 
-class LoginPage extends StatefulWidget {
-  LoginPage({Key? key}) : super(key: key);
+class OpenPage extends StatefulWidget {
+  OpenPage({Key? key}) : super(key: key);
 
   @override
-  _LoginPageState createState() => _LoginPageState();
+  _OpenPageState createState() => _OpenPageState();
 }
 
-class _LoginPageState extends State<LoginPage> {
+class _OpenPageState extends State<OpenPage> {
   @override
   Widget build(BuildContext context) {
-    String? password = '';
-    String? username = '';
     return SafeArea(
       child: Scaffold(
         body: Container(
@@ -55,7 +55,7 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                   ),
                   Text(
-                    'Login',
+                    'Shar',
                     style: GoogleFonts.londrinaSolid(
                       textStyle: TextStyle(
                         color: Color.fromRGBO(252, 222, 156, 1),
@@ -64,58 +64,32 @@ class _LoginPageState extends State<LoginPage> {
                       ),
                     ),
                   ),
-                  SizeHeight10(),
+                  SizedBox(
+                    height: 10,
+                  ),
                   Text(
-                    'Play anonymous messages in your group chat',
-                    textAlign: TextAlign.center,
+                    'Recieve anonymous messages from anyone without them having an account',
                     style: GoogleFonts.londrinaSolid(
                       textStyle: TextStyle(
-                        color: Color.fromRGBO(254, 248, 235, 1),
+                        color: Colors.white,
+                        fontSize: 25,
                       ),
                     ),
+                    textAlign: TextAlign.center,
                   ),
                   Spacer(),
-                  RoundedInputField(
-                    hintText: 'Username',
-                    onChanged: (value) {
-                      username = value;
-                    },
-                  ),
-                  RoundedPasswordField(
-                    text: 'Password',
-                    onChanged: (val) {
-                      password = val;
+                  RoundedButton(
+                    text: 'Find User',
+                    press: () {
+                      Get.to(() => FindUser());
                     },
                   ),
                   RoundedButton(
-                    text: 'Login',
+                    text: 'Register',
                     press: () {
-                      Future data =
-                          login(password: password, username: username);
+                      Get.to(() => SignupPage());
                     },
                   ),
-                  TextButton(
-                    onPressed: () {},
-                    child: Text(
-                      'Forgot your password',
-                      style: GoogleFonts.londrinaSolid(
-                        textStyle: TextStyle(
-                          color: Colors.grey,
-                        ),
-                      ),
-                    ),
-                  ),
-                  Divider(
-                    height: 1,
-                    color: Colors.grey[850],
-                  ),
-                  SizeHeight5(),
-                  AlreadyHaveAnAccountCheck(
-                    login: true,
-                    press: () {
-                      Get.off(() => SignupPage());
-                    },
-                  )
                 ],
               ),
             ),
