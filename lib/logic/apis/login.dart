@@ -16,7 +16,7 @@ Future login({
     'username': username,
     'password': password,
   });
-  print(data);
+
   http.Response response = await http.post(
     url,
     headers: {
@@ -26,7 +26,6 @@ Future login({
     body: data,
   );
   if (response.statusCode == 200) {
-    print(response.body);
     LoginData data = loginDataFromJson(response.body);
     UserPreferences().saveUser(
       User(
@@ -44,8 +43,6 @@ Future login({
       snackStyle: SnackStyle.FLOATING,
     );
   } else {
-    print(response.body);
-    print(response.statusCode);
     Get.snackbar(
       'Error',
       'Unable to login',
@@ -54,8 +51,6 @@ Future login({
       colorText: Colors.white,
       snackStyle: SnackStyle.FLOATING,
     );
-
-    throw Exception('Unable to load data');
   }
 }
 

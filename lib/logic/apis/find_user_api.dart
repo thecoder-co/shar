@@ -1,9 +1,8 @@
-import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
-import 'package:shar/domain/user.dart';
 import 'package:shar/send_message/send_message.dart';
 import 'package:shar/util/app_url.dart';
-import 'package:shar/util/shared_preference.dart';
+import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+
 import 'dart:convert';
 import 'package:get/get.dart';
 

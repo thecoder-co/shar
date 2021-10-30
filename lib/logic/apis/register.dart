@@ -16,7 +16,7 @@ Future register({
     'username': username,
     'password': password,
   });
-  print(data);
+
   http.Response response = await http.post(
     url,
     headers: {
@@ -43,13 +43,11 @@ Future register({
       snackStyle: SnackStyle.FLOATING,
     );
   } else {
-    print(response.body);
-    print(response.statusCode);
-
     if (response.statusCode == 400) {
+      Map user = jsonDecode(response.body);
       Get.snackbar(
         'Error',
-        'Password is too short or too common',
+        user["detail"]!,
         margin: EdgeInsets.all(20),
         duration: Duration(milliseconds: 2000),
         colorText: Colors.white,
@@ -58,15 +56,13 @@ Future register({
     } else {
       Get.snackbar(
         'Error',
-        'Unable to load data',
+        'Unable to register user',
         margin: EdgeInsets.all(20),
         duration: Duration(milliseconds: 2000),
         colorText: Colors.white,
         snackStyle: SnackStyle.FLOATING,
       );
     }
-
-    throw Exception('Unable to load data');
   }
 }
 
@@ -86,7 +82,7 @@ class RegisterUser {
 
   factory RegisterUser.fromJson(Map<String, dynamic> json) => RegisterUser(
         detail: json["detail"],
-        tokens: Tokens.fromJson(json["tokens"]),
+        tokens: Tokens.fromJson(json["tokens"]!),
       );
 
   Map<String, dynamic> toJson() => {

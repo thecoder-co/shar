@@ -42,8 +42,6 @@ Future deleteMessage({
       snackStyle: SnackStyle.FLOATING,
     );
   } else {
-    print(response.body);
-    print(response.statusCode);
     Get.snackbar(
       'Error',
       'Message not found',

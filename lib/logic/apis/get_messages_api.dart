@@ -1,8 +1,7 @@
-import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:shar/domain/user.dart';
 import 'package:shar/util/app_url.dart';
 import 'package:shar/util/shared_preference.dart';
+
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 

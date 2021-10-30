@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:shar/components/global_widgets.dart';
-import 'package:shar/components/rounded_button.dart';
-import 'package:shar/components/rounded_input_field.dart';
-import 'package:shar/components/send_message_input.dart';
-import 'package:shar/logic/apis/send_message_api.dart';
+import '../components/global_widgets.dart';
+import '../components/rounded_button.dart';
+import '../components/send_message_input.dart';
+import '../logic/apis/send_message_api.dart';
 
 class SendMessagePage extends StatefulWidget {
   final String? username;
@@ -101,36 +100,6 @@ class _SendMessagePageState extends State<SendMessagePage> {
                     ],
                   ),
                 ),
-              ),
-            ),
-          ),
-        ),
-      ),
-    );
-    SafeArea(
-      child: Scaffold(
-        body: Container(
-          decoration: BoxDecoration(
-            gradient: LinearGradient(
-              begin: Alignment.topRight,
-              end: Alignment.bottomLeft,
-              colors: [
-                Colors.indigo,
-                Color.fromRGBO(213, 41, 65, 1),
-              ],
-            ),
-          ),
-          child: Center(
-            child: Container(
-              width: 400,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10),
-                color: Color.fromRGBO(57, 0, 82, 1),
-              ),
-              margin: EdgeInsets.fromLTRB(20, 50, 20, 50),
-              padding: EdgeInsets.fromLTRB(20, 50, 20, 50),
-              child: Column(
-                children: [],
               ),
             ),
           ),

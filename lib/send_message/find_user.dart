@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:shar/components/global_widgets.dart';
-import 'package:shar/components/rounded_button.dart';
-import 'package:shar/components/rounded_input_field.dart';
-import 'package:shar/logic/apis/find_user_api.dart';
+import '../components/global_widgets.dart';
+import '../components/rounded_button.dart';
+import '../components/rounded_input_field.dart';
+import '../logic/apis/find_user_api.dart';
 
 class FindUser extends StatefulWidget {
   FindUser({Key? key}) : super(key: key);
@@ -52,9 +52,10 @@ class _FindUserState extends State<FindUser> {
                             borderRadius: BorderRadius.circular(100),
                             child: CircleAvatar(
                               child: Image.asset(
-                                'asset/avatar.png',
+                                'asset/logo.png',
                               ),
                               radius: 60,
+                              backgroundColor: Colors.transparent,
                             ),
                           ),
                           Text(

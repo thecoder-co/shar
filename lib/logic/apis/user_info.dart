@@ -1,3 +1,5 @@
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:shar/domain/user.dart';
 import 'package:shar/util/app_url.dart';
 import 'package:shar/util/shared_preference.dart';
@@ -21,6 +23,14 @@ Future<UserInfo> getUserInfo() async {
     UserInfo data = userInfoFromJson(response.body);
     return data;
   } else {
+    Get.snackbar(
+      'Error',
+      'Unable to get user data',
+      margin: EdgeInsets.all(20),
+      duration: Duration(milliseconds: 2000),
+      colorText: Colors.white,
+      snackStyle: SnackStyle.FLOATING,
+    );
     throw Exception('Unable to load data');
   }
 }

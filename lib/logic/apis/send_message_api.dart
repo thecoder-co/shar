@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:shar/domain/user.dart';
-import 'package:shar/send_message/send_message.dart';
 import 'package:shar/signup/signup_page.dart';
 import 'package:shar/user_page/user_page.dart';
 import 'package:shar/util/app_url.dart';

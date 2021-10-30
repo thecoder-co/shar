@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:shar/constants.dart';
 
 class AlreadyHaveAnAccountCheck extends StatelessWidget {
   final bool? login;

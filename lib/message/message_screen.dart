@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:shar/components/rounded_button.dart';
-import 'package:shar/logic/apis/delete_message.dart';
-import 'package:shar/logic/apis/get_messages_api.dart';
-import 'package:shar/user_page/user_page.dart';
+import '../components/rounded_button.dart';
+import '../logic/apis/delete_message.dart';
+import '../logic/apis/get_messages_api.dart';
+import '../user_page/user_page.dart';
 
 class MessagePage extends StatefulWidget {
   final String? username;
@@ -167,7 +167,7 @@ class _MessagePageState extends State<MessagePage> {
                                       ),
                                       SizedBox(height: 10),
                                       Text(
-                                        "- Anonymous [${returnedData.messages![index].created.toString()}]",
+                                        "- Anonymous [${returnedData.messages![index].created!.toUtc().toLocal()}]",
                                         style: GoogleFonts.londrinaSolid(
                                           textStyle: TextStyle(
                                             color: Color.fromRGBO(

@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:shar/login/login_page.dart';
-
 import 'package:get/get.dart';
-import 'package:shar/send_message/find_user.dart';
-import 'package:shar/send_message/send_message.dart';
+
 import 'package:shar/signup/opening_page.dart';
 import 'package:shar/user_page/user_page.dart';
 import 'package:shar/util/shared_preference.dart';
@@ -17,7 +14,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
-      title: 'Flutter Demo',
+      title: 'Shar Anonymous Messages',
       theme: ThemeData(
         primarySwatch: Colors.indigo,
         accentColor: Color.fromRGBO(213, 41, 65, 1),
