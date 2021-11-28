@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
+import 'package:shar/constants.dart';
 import 'package:shar/domain/user.dart';
-import 'package:shar/message/message_screen.dart';
 import 'package:shar/util/app_url.dart';
 import 'package:shar/util/shared_preference.dart';
 import 'dart:convert';
@@ -16,6 +17,22 @@ Future deleteMessage({
   User user = await UserPreferences().getUser();
   String token = user.accessToken!;
 
+  Get.defaultDialog(
+    backgroundColor: kPrimaryColor,
+    content: CircularProgressIndicator(
+      color: kGold,
+    ),
+    radius: 10,
+    title: 'Loading',
+    titleStyle: GoogleFonts.getFont(
+      'Overlock',
+      textStyle: TextStyle(
+        fontSize: 16,
+        color: kGold,
+        fontWeight: FontWeight.w900,
+      ),
+    ),
+  );
   http.Response response = await http.delete(
     url,
     headers: {
@@ -25,14 +42,17 @@ Future deleteMessage({
     },
     body: json.encode({"message_id": messageId}),
   );
+  Get.back();
   if (response.statusCode == 200) {
-    Get.off(
-      () => MessagePage(
-        username: username,
-        sharecode: sharecode,
-      ),
+    Get.toNamed(
+      '/get_messages',
+      parameters: {
+        'username': username!,
+        'shareCode': sharecode!,
+      },
       preventDuplicates: false,
     );
+
     Get.snackbar(
       'Successful',
       'Deleted Message Successfully',

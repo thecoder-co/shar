@@ -1,18 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:shar/constants.dart';
+import 'package:shar/message/share_message.dart';
 import '../components/rounded_button.dart';
 import '../logic/apis/delete_message.dart';
 import '../logic/apis/get_messages_api.dart';
 import '../user_page/user_page.dart';
 
 class MessagePage extends StatefulWidget {
-  final String? username;
-  final String? sharecode;
   MessagePage({
     Key? key,
-    required this.username,
-    required this.sharecode,
   }) : super(key: key);
 
   @override
@@ -29,6 +27,9 @@ class _MessagePageState extends State<MessagePage> {
 
   @override
   Widget build(BuildContext context) {
+    Map userData = Get.parameters;
+    String username = userData['username'];
+    String shareCode = userData['shareCode'];
     return SafeArea(
       child: Container(
         decoration: BoxDecoration(
@@ -57,7 +58,7 @@ class _MessagePageState extends State<MessagePage> {
                   child: Column(
                     children: [
                       Text(
-                        widget.username!,
+                        username,
                         style: GoogleFonts.londrinaSolid(
                           textStyle: TextStyle(
                             color: Color.fromRGBO(252, 222, 156, 1),
@@ -98,7 +99,7 @@ class _MessagePageState extends State<MessagePage> {
                                       ),
                                     ),
                                     SelectableText(
-                                      widget.sharecode!,
+                                      "https://shar-ec801.web.app/#/send_message/$shareCode",
                                       style: GoogleFonts.londrinaSolid(
                                         textStyle: TextStyle(
                                           color: Colors.white,
@@ -181,13 +182,119 @@ class _MessagePageState extends State<MessagePage> {
                                         children: [
                                           Expanded(
                                             child: InkWell(
+                                              onTap: () {
+                                                Get.to(ShareMessage(
+                                                    message: returnedData
+                                                        .messages![index]));
+                                              },
+                                              child: Container(
+                                                alignment: Alignment.center,
+                                                margin: EdgeInsets.only(top: 3),
+                                                decoration: BoxDecoration(
+                                                  borderRadius:
+                                                      BorderRadius.circular(50),
+                                                  border: Border.all(
+                                                    width: 1.0,
+                                                    color: Colors.green,
+                                                  ),
+                                                ),
+                                                child: Row(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.center,
+                                                  children: [
+                                                    Text(
+                                                      'Share',
+                                                      style: GoogleFonts
+                                                          .londrinaSolid(
+                                                        textStyle: TextStyle(
+                                                          color: Colors.white,
+                                                          letterSpacing: 2,
+                                                        ),
+                                                      ),
+                                                    ),
+                                                    SizedBox(width: 5),
+                                                    Icon(
+                                                      Icons.share,
+                                                      color: Colors.green,
+                                                      size: 20,
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          Expanded(
+                                            child: InkWell(
                                               onTap: () async {
-                                                deleteMessage(
-                                                  messageId: returnedData
-                                                      .messages![index].id
-                                                      .toString(),
-                                                  username: widget.username!,
-                                                  sharecode: widget.sharecode!,
+                                                Get.defaultDialog(
+                                                  backgroundColor:
+                                                      kPrimaryColor,
+                                                  radius: 10,
+                                                  title: 'Delete?',
+                                                  content: Text(
+                                                    'Are you sure you want to delete message?',
+                                                    style: GoogleFonts
+                                                        .londrinaSolid(
+                                                      textStyle: TextStyle(
+                                                        color: Colors.white,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  titleStyle:
+                                                      GoogleFonts.londrinaSolid(
+                                                    textStyle: TextStyle(
+                                                      color: kGold,
+                                                    ),
+                                                  ),
+                                                  actions: [
+                                                    TextButton(
+                                                      child: Text(
+                                                        'No',
+                                                        style: GoogleFonts
+                                                            .londrinaSolid(
+                                                          textStyle: TextStyle(
+                                                            color: kGold,
+                                                            letterSpacing: 2,
+                                                          ),
+                                                        ),
+                                                      ),
+                                                      onPressed: () {
+                                                        Get.back();
+                                                      },
+                                                    ),
+                                                    TextButton(
+                                                        child: Text(
+                                                          'Yes',
+                                                          style: GoogleFonts
+                                                              .londrinaSolid(
+                                                            textStyle:
+                                                                TextStyle(
+                                                              color: kGold,
+                                                              letterSpacing: 2,
+                                                            ),
+                                                          ),
+                                                        ),
+                                                        onPressed: () {
+                                                          deleteMessage(
+                                                            messageId:
+                                                                returnedData
+                                                                    .messages![
+                                                                        index]
+                                                                    .id
+                                                                    .toString(),
+                                                            username: username,
+                                                            sharecode:
+                                                                shareCode,
+                                                          );
+                                                          Get.back();
+                                                        }),
+                                                  ],
                                                 );
                                               },
                                               child: Container(
@@ -201,15 +308,28 @@ class _MessagePageState extends State<MessagePage> {
                                                     color: Colors.red,
                                                   ),
                                                 ),
-                                                child: Text(
-                                                  'Delete',
-                                                  style:
-                                                      GoogleFonts.londrinaSolid(
-                                                    textStyle: TextStyle(
-                                                      color: Colors.white,
-                                                      letterSpacing: 2,
+                                                child: Row(
+                                                  //align to center
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.center,
+                                                  children: [
+                                                    Text(
+                                                      'Delete',
+                                                      style: GoogleFonts
+                                                          .londrinaSolid(
+                                                        textStyle: TextStyle(
+                                                          color: Colors.white,
+                                                          letterSpacing: 2,
+                                                        ),
+                                                      ),
                                                     ),
-                                                  ),
+                                                    SizedBox(width: 5),
+                                                    Icon(
+                                                      Icons.delete_outline,
+                                                      color: Colors.red,
+                                                      size: 20,
+                                                    ),
+                                                  ],
                                                 ),
                                               ),
                                             ),
@@ -231,11 +351,16 @@ class _MessagePageState extends State<MessagePage> {
                               snackStyle: SnackStyle.FLOATING,
                             );
                             return SizedBox(
-                              height: Get.height / 2,
+                              height: Get.height / 2 + 50,
                             );
                           }
-                          return SizedBox(
-                            height: Get.height / 2,
+                          return Container(
+                            height: Get.height / 2 + 50,
+                            child: Center(
+                              child: CircularProgressIndicator(
+                                color: Color.fromRGBO(252, 222, 156, 1),
+                              ),
+                            ),
                           );
                         },
                       ),

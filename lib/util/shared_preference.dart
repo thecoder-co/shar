@@ -3,7 +3,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:async';
 
 class UserPreferences {
-  void saveUser(User user) async {
+  Future saveUser(User user) async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
 
     prefs.setString("refreshToken", user.refreshToken!);
@@ -11,11 +11,13 @@ class UserPreferences {
   }
 
   Future<User> getUser() async {
+    String? accessToken;
+    String? refreshToken;
+
     final SharedPreferences prefs = await SharedPreferences.getInstance();
 
-    String? accessToken = prefs.getString("accessToken");
-
-    String? refreshToken = prefs.getString("refreshToken");
+    accessToken = prefs.getString("accessToken");
+    refreshToken = prefs.getString("refreshToken");
 
     return User(
       accessToken: accessToken,
@@ -37,13 +39,8 @@ class UserPreferences {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
 
     prefs.remove("refreshToken");
-
     prefs.remove("accessToken");
-  }
-
-  Future<String> getToken(args) async {
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
-    String? token = prefs.getString("token");
-    return token!;
+    prefs.remove("username");
+    prefs.remove("shareCode");
   }
 }

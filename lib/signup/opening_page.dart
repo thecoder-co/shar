@@ -3,8 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../components/rounded_button.dart';
-import '../send_message/find_user.dart';
-import '../signup/signup_page.dart';
 
 class OpenPage extends StatefulWidget {
   OpenPage({Key? key}) : super(key: key);
@@ -75,7 +73,7 @@ class _OpenPageState extends State<OpenPage> {
                         ),
                         textAlign: TextAlign.center,
                         transitionHeight: 140,
-                        duration: Duration(milliseconds: 1000),
+                        duration: Duration(milliseconds: 3000),
                       ),
                       RotateAnimatedText(
                         'Make anonymous message games in your group chat',
@@ -87,7 +85,7 @@ class _OpenPageState extends State<OpenPage> {
                           ),
                         ),
                         transitionHeight: 110,
-                        duration: Duration(milliseconds: 1000),
+                        duration: Duration(milliseconds: 3000),
                       ),
                       RotateAnimatedText(
                         'Play confession nights with your friends',
@@ -98,7 +96,7 @@ class _OpenPageState extends State<OpenPage> {
                             fontSize: 25,
                           ),
                         ),
-                        duration: Duration(milliseconds: 1000),
+                        duration: Duration(milliseconds: 3000),
                       ),
                     ],
                     repeatForever: true,
@@ -108,15 +106,15 @@ class _OpenPageState extends State<OpenPage> {
                   ),
                   Spacer(),
                   RoundedButton(
-                    text: 'Find User',
+                    text: 'Log in',
                     press: () {
-                      Get.to(() => FindUser());
+                      Get.toNamed('/login');
                     },
                   ),
                   RoundedButton(
-                    text: 'Register',
+                    text: 'Register',
                     press: () {
-                      Get.to(() => SignupPage());
+                      Get.toNamed('/signup');
                     },
                   ),
                 ],

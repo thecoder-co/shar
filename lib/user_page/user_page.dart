@@ -1,13 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+
+import 'package:shar/logic/apis/logout.dart';
 import '../components/rounded_button.dart';
 import '../logic/apis/user_info.dart';
-import '../login/login_page.dart';
-import '../message/message_screen.dart';
-import '../send_message/find_user.dart';
 import 'package:flutter/services.dart';
-import '../util/shared_preference.dart';
 
 class MainUserPage extends StatefulWidget {
   MainUserPage({Key? key}) : super(key: key);
@@ -17,16 +15,13 @@ class MainUserPage extends StatefulWidget {
 }
 
 class _MainUserPageState extends State<MainUserPage> {
-  late Future<UserInfo> userInfo;
-  String? shareCode;
-  String? username;
-
   @override
   void initState() {
     super.initState();
-    userInfo = getUserInfo();
   }
 
+  String? shareCode;
+  String? username;
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -55,86 +50,78 @@ class _MainUserPageState extends State<MainUserPage> {
                   ),
                   margin: EdgeInsets.fromLTRB(20, 50, 20, 50),
                   padding: EdgeInsets.fromLTRB(20, 50, 20, 50),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      Column(
-                        children: [
-                          FutureBuilder(
-                            future: userInfo,
-                            builder:
-                                (BuildContext context, AsyncSnapshot snapshot) {
-                              if (snapshot.hasData) {
-                                UserInfo data = snapshot.data;
-                                shareCode = data.data!.shareCode;
-                                username = data.data!.username;
-                                return Text(
-                                  '${data.data!.username}',
-                                  style: GoogleFonts.londrinaSolid(
-                                    textStyle: TextStyle(
-                                      color: Color.fromRGBO(252, 222, 156, 1),
-                                      fontSize: 30,
-                                      letterSpacing: 3,
-                                    ),
-                                  ),
-                                );
-                              } else if (snapshot.hasError) {
+                  child: FutureBuilder(
+                    future: getUserInfo(),
+                    builder: (BuildContext context, AsyncSnapshot snapshot) {
+                      if (snapshot.hasData) {
+                        UserInfo data = snapshot.data;
+                        shareCode = data.data!.shareCode;
+                        username = data.data!.username;
+                        return Column(
+                          children: [
+                            Text(
+                              '$username',
+                              style: GoogleFonts.londrinaSolid(
+                                textStyle: TextStyle(
+                                  color: Color.fromRGBO(252, 222, 156, 1),
+                                  fontSize: 30,
+                                  letterSpacing: 3,
+                                ),
+                              ),
+                            ),
+                            Spacer(),
+                            RoundedButton(
+                              text: 'Share Code',
+                              press: () {
+                                String link =
+                                    "https://shar-ec801.web.app/#/send_message/$shareCode";
+                                Clipboard.setData(ClipboardData(text: link));
                                 Get.snackbar(
-                                  'Error',
-                                  'Unable to get profile details',
+                                  'Successful',
+                                  'Share code link copied to clipboard',
                                   margin: EdgeInsets.all(20),
                                   duration: Duration(milliseconds: 2000),
                                   colorText: Colors.white,
                                   snackStyle: SnackStyle.FLOATING,
                                 );
-                              }
-                              return SizedBox(
-                                height: 0,
-                              );
-                            },
-                          ),
-                        ],
-                      ),
-                      Spacer(),
-                      RoundedButton(
-                        text: 'Share Code',
-                        press: () {
-                          Clipboard.setData(ClipboardData(text: shareCode));
-                          Get.snackbar(
-                            'Successful',
-                            'Share code copied to clipboard',
-                            margin: EdgeInsets.all(20),
-                            duration: Duration(milliseconds: 2000),
-                            colorText: Colors.white,
-                            snackStyle: SnackStyle.FLOATING,
-                          );
-                        },
-                      ),
-                      RoundedButton(
-                        text: 'View Messages',
-                        press: () {
-                          Get.to(
-                            () => MessagePage(
-                              username: username!,
-                              sharecode: shareCode!,
+                              },
                             ),
-                          );
-                        },
-                      ),
-                      RoundedButton(
-                        text: 'Find User',
-                        press: () {
-                          Get.to(() => FindUser());
-                        },
-                      ),
-                      RoundedButton(
-                        text: 'Log Out',
-                        press: () {
-                          UserPreferences().removeUser();
-                          Get.off(() => LoginPage());
-                        },
-                      ),
-                    ],
+                            RoundedButton(
+                              text: 'View Messages',
+                              press: () {
+                                Get.toNamed(
+                                  '/get_messages',
+                                  parameters: {
+                                    'username': username!,
+                                    'shareCode': shareCode!,
+                                  },
+                                );
+                              },
+                            ),
+                            RoundedButton(
+                              text: 'Log Out',
+                              press: () {
+                                logout();
+                              },
+                            ),
+                          ],
+                        );
+                      } else if (snapshot.hasError) {
+                        Get.snackbar(
+                          'Error',
+                          'Unable to get profile details',
+                          margin: EdgeInsets.all(20),
+                          duration: Duration(milliseconds: 2000),
+                          colorText: Colors.white,
+                          snackStyle: SnackStyle.FLOATING,
+                        );
+                      }
+                      return Center(
+                        child: CircularProgressIndicator(
+                          color: Color.fromRGBO(252, 222, 156, 1),
+                        ),
+                      );
+                    },
                   ),
                 ),
               ),

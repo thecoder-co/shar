@@ -7,7 +7,6 @@ import '../components/rounded_button.dart';
 import '../components/rounded_input_field.dart';
 import '../components/rounded_password_field.dart';
 import '../logic/apis/login.dart';
-import '../signup/signup_page.dart';
 import 'package:animated_text_kit/animated_text_kit.dart';
 
 class LoginPage extends StatefulWidget {
@@ -84,7 +83,7 @@ class _LoginPageState extends State<LoginPage> {
                                     color: Color.fromRGBO(254, 248, 235, 1),
                                   ),
                                 ),
-                                duration: Duration(milliseconds: 1000),
+                                duration: Duration(milliseconds: 3000),
                               ),
                               RotateAnimatedText(
                                 'Make anonymous message games in your group chat',
@@ -94,7 +93,7 @@ class _LoginPageState extends State<LoginPage> {
                                     color: Color.fromRGBO(254, 248, 235, 1),
                                   ),
                                 ),
-                                duration: Duration(milliseconds: 1000),
+                                duration: Duration(milliseconds: 3000),
                               ),
                               RotateAnimatedText(
                                 'Play confession nights with your friends',
@@ -104,7 +103,7 @@ class _LoginPageState extends State<LoginPage> {
                                     color: Color.fromRGBO(254, 248, 235, 1),
                                   ),
                                 ),
-                                duration: Duration(milliseconds: 1000),
+                                duration: Duration(milliseconds: 3000),
                               ),
                             ],
                             repeatForever: true,
@@ -152,7 +151,7 @@ class _LoginPageState extends State<LoginPage> {
                       AlreadyHaveAnAccountCheck(
                         login: true,
                         press: () {
-                          Get.off(() => SignupPage());
+                          Get.offNamed('/signup');
                         },
                       )
                     ],

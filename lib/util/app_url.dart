@@ -9,4 +9,5 @@ class AppUrl {
   static const String sendMessage = baseURL + "/messaging/";
   static const String getMessages = baseURL + "/api/user/messages/";
   static const String delMessage = baseURL + "/api/user/message/delete/";
+  static const String logout = baseURL + "/api/user/logout/blacklist/";
 }

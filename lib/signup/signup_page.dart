@@ -8,7 +8,6 @@ import '../components/rounded_button.dart';
 import '../components/rounded_input_field.dart';
 import '../components/rounded_password_field.dart';
 import '../logic/apis/register.dart';
-import '../login/login_page.dart';
 
 class SignupPage extends StatefulWidget {
   SignupPage({Key? key}) : super(key: key);
@@ -85,7 +84,7 @@ class _SignupPageState extends State<SignupPage> {
                                     color: Color.fromRGBO(254, 248, 235, 1),
                                   ),
                                 ),
-                                duration: Duration(milliseconds: 1000),
+                                duration: Duration(milliseconds: 3000),
                               ),
                               RotateAnimatedText(
                                 'Make anonymous message games in your group chat',
@@ -95,7 +94,7 @@ class _SignupPageState extends State<SignupPage> {
                                     color: Color.fromRGBO(254, 248, 235, 1),
                                   ),
                                 ),
-                                duration: Duration(milliseconds: 1000),
+                                duration: Duration(milliseconds: 3000),
                               ),
                               RotateAnimatedText(
                                 'Play confession nights with your friends',
@@ -105,7 +104,7 @@ class _SignupPageState extends State<SignupPage> {
                                     color: Color.fromRGBO(254, 248, 235, 1),
                                   ),
                                 ),
-                                duration: Duration(milliseconds: 1000),
+                                duration: Duration(milliseconds: 3000),
                               ),
                             ],
                             repeatForever: true,
@@ -137,7 +136,7 @@ class _SignupPageState extends State<SignupPage> {
                             },
                           ),
                           RoundedButton(
-                            text: 'Register',
+                            text: 'Register',
                             press: () {
                               if (password == passwordConfirmation) {
                                 register(
@@ -158,7 +157,7 @@ class _SignupPageState extends State<SignupPage> {
                           AlreadyHaveAnAccountCheck(
                             login: false,
                             press: () {
-                              Get.off(() => LoginPage());
+                              Get.offNamed('/login');
                             },
                           ),
                         ],

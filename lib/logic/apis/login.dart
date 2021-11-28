@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
+import 'package:shar/constants.dart';
 import 'package:shar/domain/user.dart';
-import 'package:shar/user_page/user_page.dart';
 import 'package:shar/util/app_url.dart';
 import 'package:shar/util/shared_preference.dart';
 import 'dart:convert';
@@ -16,7 +17,22 @@ Future login({
     'username': username,
     'password': password,
   });
-
+  Get.defaultDialog(
+    backgroundColor: kPrimaryColor,
+    content: CircularProgressIndicator(
+      color: kGold,
+    ),
+    radius: 10,
+    title: 'Loading',
+    titleStyle: GoogleFonts.getFont(
+      'Overlock',
+      textStyle: TextStyle(
+        fontSize: 16,
+        color: kGold,
+        fontWeight: FontWeight.w900,
+      ),
+    ),
+  );
   http.Response response = await http.post(
     url,
     headers: {
@@ -25,27 +41,33 @@ Future login({
     },
     body: data,
   );
+  Get.back();
   if (response.statusCode == 200) {
     LoginData data = loginDataFromJson(response.body);
-    UserPreferences().saveUser(
+    UserPreferences()
+        .saveUser(
       User(
         accessToken: data.tokens!.access,
         refreshToken: data.tokens!.refresh,
       ),
-    );
-    Get.off(() => MainUserPage());
-    Get.snackbar(
-      'Successful',
-      'Login successful',
-      margin: EdgeInsets.all(20),
-      duration: Duration(milliseconds: 2000),
-      colorText: Colors.white,
-      snackStyle: SnackStyle.FLOATING,
-    );
+    )
+        .then((value) {
+      Get.offAllNamed('/home');
+      Get.snackbar(
+        'Successful',
+        'Login successful',
+        margin: EdgeInsets.all(20),
+        duration: Duration(milliseconds: 2000),
+        colorText: Colors.white,
+        snackStyle: SnackStyle.FLOATING,
+      );
+    });
   } else {
+    print(response.body);
+    Map user = jsonDecode(response.body);
     Get.snackbar(
       'Error',
-      'Unable to login',
+      user['detail'],
       margin: EdgeInsets.all(20),
       duration: Duration(milliseconds: 2000),
       colorText: Colors.white,

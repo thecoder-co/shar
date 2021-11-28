@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
+import 'package:shar/constants.dart';
 import 'package:shar/domain/user.dart';
-import 'package:shar/user_page/user_page.dart';
 import 'package:shar/util/app_url.dart';
 import 'package:shar/util/shared_preference.dart';
 import 'dart:convert';
@@ -16,7 +17,22 @@ Future register({
     'username': username,
     'password': password,
   });
-
+  Get.defaultDialog(
+    backgroundColor: kPrimaryColor,
+    content: CircularProgressIndicator(
+      color: kGold,
+    ),
+    radius: 10,
+    title: 'Loading',
+    titleStyle: GoogleFonts.getFont(
+      'Overlock',
+      textStyle: TextStyle(
+        fontSize: 16,
+        color: kGold,
+        fontWeight: FontWeight.w900,
+      ),
+    ),
+  );
   http.Response response = await http.post(
     url,
     headers: {
@@ -25,23 +41,27 @@ Future register({
     },
     body: data,
   );
+  Get.back();
   if (response.statusCode == 200) {
     RegisterUser user = registerUserFromJson(response.body);
-    UserPreferences().saveUser(
+    UserPreferences()
+        .saveUser(
       User(
         accessToken: user.tokens!.access,
         refreshToken: user.tokens!.refresh,
       ),
-    );
-    Get.off(() => MainUserPage());
-    Get.snackbar(
-      'Successful',
-      'User created successfully',
-      margin: EdgeInsets.all(20),
-      duration: Duration(milliseconds: 2000),
-      colorText: Colors.white,
-      snackStyle: SnackStyle.FLOATING,
-    );
+    )
+        .then((value) {
+      Get.offAllNamed('/home');
+      Get.snackbar(
+        'Successful',
+        'User created successfully',
+        margin: EdgeInsets.all(20),
+        duration: Duration(milliseconds: 2000),
+        colorText: Colors.white,
+        snackStyle: SnackStyle.FLOATING,
+      );
+    });
   } else {
     if (response.statusCode == 400) {
       Map user = jsonDecode(response.body);

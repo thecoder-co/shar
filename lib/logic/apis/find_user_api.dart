@@ -1,4 +1,3 @@
-import 'package:shar/send_message/send_message.dart';
 import 'package:shar/util/app_url.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -19,13 +18,8 @@ Future findUser({
     },
   );
   if (response.statusCode == 200) {
-    GetUsername data = getUsernameFromJson(response.body);
-    Get.off(
-      () => SendMessagePage(
-        username: data.username,
-        shareCode: shareCode,
-      ),
-    );
+    GetUsername data = getUsernameFromJson(response.body, shareCode);
+    return data;
   } else {
     Get.snackbar(
       'Error',
@@ -35,11 +29,12 @@ Future findUser({
       colorText: Colors.white,
       snackStyle: SnackStyle.FLOATING,
     );
+    throw Exception();
   }
 }
 
-GetUsername getUsernameFromJson(String str) =>
-    GetUsername.fromJson(json.decode(str));
+GetUsername getUsernameFromJson(String str, shareCode) =>
+    GetUsername.fromJson(json.decode(str), shareCode);
 
 String getUsernameToJson(GetUsername data) => json.encode(data.toJson());
 
@@ -47,18 +42,23 @@ class GetUsername {
   GetUsername({
     this.detail,
     this.username,
+    this.shareCode,
   });
 
   String? detail;
   String? username;
+  String? shareCode;
 
-  factory GetUsername.fromJson(Map<String, dynamic> json) => GetUsername(
+  factory GetUsername.fromJson(Map<String, dynamic> json, String shareCode) =>
+      GetUsername(
         detail: json["detail"],
         username: json["username"],
+        shareCode: shareCode,
       );
 
   Map<String, dynamic> toJson() => {
         "detail": detail,
         "username": username,
+        "shareCode": shareCode,
       };
 }
