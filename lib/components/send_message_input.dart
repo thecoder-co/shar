@@ -2,32 +2,28 @@ import 'package:flutter/material.dart';
 import 'package:shar/components/text_field_container.dart';
 import 'package:shar/constants.dart';
 
-class SendMessageInputField extends StatefulWidget {
+class SendMessageInputField extends StatelessWidget {
   final String? hintText;
   final IconData? icon;
   final ValueChanged<String>? onChanged;
+  final TextEditingController? controller;
+  const SendMessageInputField(
+      {Key? key,
+      this.hintText,
+      this.icon = Icons.person,
+      this.onChanged,
+      this.controller})
+      : super(key: key);
 
-  const SendMessageInputField({
-    Key? key,
-    this.hintText,
-    this.icon = Icons.person,
-    this.onChanged,
-  }) : super(key: key);
-
-  @override
-  _SendMessageInputFieldState createState() => _SendMessageInputFieldState();
-}
-
-class _SendMessageInputFieldState extends State<SendMessageInputField> {
   @override
   Widget build(BuildContext context) {
     return SendMessageContainer(
-      child: TextField(
+      child: TextFormField(
         expands: true,
         maxLines: null,
+        controller: controller,
         minLines: null,
-        onChanged: widget.onChanged,
-        onSubmitted: widget.onChanged,
+        onChanged: onChanged,
         cursorColor: kPrimaryColor,
         decoration: InputDecoration(
           hintText:

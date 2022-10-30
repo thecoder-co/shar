@@ -1,78 +1,41 @@
-import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:http/http.dart' as http;
-import 'package:shar/constants.dart';
-import 'package:shar/domain/user.dart';
-import 'package:shar/util/app_url.dart';
-import 'package:shar/util/shared_preference.dart';
-import 'dart:convert';
-import 'package:get/get.dart';
+import 'dart:async';
+import 'dart:io';
 
-Future login({
-  String? username,
-  String? password,
+import 'package:http/http.dart' as http;
+import 'package:shar/domain/string_exception.dart';
+import 'package:shar/util/app_url.dart';
+
+import 'dart:convert';
+
+Future<LoginData> loginApi({
+  required String username,
+  required String password,
 }) async {
-  Uri url = Uri.parse(AppUrl.login);
-  var data = json.encode({
-    'username': username,
-    'password': password,
-  });
-  Get.defaultDialog(
-    backgroundColor: kPrimaryColor,
-    content: CircularProgressIndicator(
-      color: kGold,
-    ),
-    radius: 10,
-    title: 'Loading',
-    titleStyle: GoogleFonts.getFont(
-      'Overlock',
-      textStyle: TextStyle(
-        fontSize: 16,
-        color: kGold,
-        fontWeight: FontWeight.w900,
-      ),
-    ),
-  );
-  http.Response response = await http.post(
-    url,
-    headers: {
-      'Content-type': 'application/json',
-      'Accept': 'application/json',
-    },
-    body: data,
-  );
-  Get.back();
-  if (response.statusCode == 200) {
-    LoginData data = loginDataFromJson(response.body);
-    UserPreferences()
-        .saveUser(
-      User(
-        accessToken: data.tokens!.access,
-        refreshToken: data.tokens!.refresh,
-      ),
-    )
-        .then((value) {
-      Get.offAllNamed('/home');
-      Get.snackbar(
-        'Successful',
-        'Login successful',
-        margin: EdgeInsets.all(20),
-        duration: Duration(milliseconds: 2000),
-        colorText: Colors.white,
-        snackStyle: SnackStyle.FLOATING,
-      );
+  try {
+    Uri url = Uri.parse(AppUrl.login);
+    var data = json.encode({
+      'username': username,
+      'password': password,
     });
-  } else {
-    print(response.body);
-    Map user = jsonDecode(response.body);
-    Get.snackbar(
-      'Error',
-      user['detail'],
-      margin: EdgeInsets.all(20),
-      duration: Duration(milliseconds: 2000),
-      colorText: Colors.white,
-      snackStyle: SnackStyle.FLOATING,
+
+    http.Response response = await http.post(
+      url,
+      headers: {
+        'Content-type': 'application/json',
+        'Accept': 'application/json',
+      },
+      body: data,
     );
+    if (response.statusCode == 200) {
+      return loginDataFromJson(response.body);
+    } else {
+      final resdata = json.decode(response.body);
+      throw StringException(resdata['message']);
+    }
+  } on TimeoutException {
+    throw StringException('Request timed out');
+  } on SocketException {
+    throw StringException('Check your internet');
   }
 }
 
@@ -82,36 +45,24 @@ String loginDataToJson(LoginData data) => json.encode(data.toJson());
 
 class LoginData {
   LoginData({
-    this.tokens,
+    this.statusCode,
+    this.message,
+    this.accessToken,
   });
 
-  Tokens? tokens;
+  int? statusCode;
+  String? message;
+  String? accessToken;
 
   factory LoginData.fromJson(Map<String, dynamic> json) => LoginData(
-        tokens: Tokens.fromJson(json["tokens"]),
+        statusCode: json["status_code"] == null ? null : json["status_code"],
+        message: json["message"] == null ? null : json["message"],
+        accessToken: json["access_token"] == null ? null : json["access_token"],
       );
 
   Map<String, dynamic> toJson() => {
-        "tokens": tokens!.toJson(),
-      };
-}
-
-class Tokens {
-  Tokens({
-    this.refresh,
-    this.access,
-  });
-
-  String? refresh;
-  String? access;
-
-  factory Tokens.fromJson(Map<String, dynamic> json) => Tokens(
-        refresh: json["refresh"],
-        access: json["access"],
-      );
-
-  Map<String, dynamic> toJson() => {
-        "refresh": refresh,
-        "access": access,
+        "status_code": statusCode == null ? null : statusCode,
+        "message": message == null ? null : message,
+        "access_token": accessToken == null ? null : accessToken,
       };
 }

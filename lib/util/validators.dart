@@ -6,7 +6,7 @@ String? validateEmail(String value) {
     _msg = "Your email is required";
     return _msg;
   } else if (!regex.hasMatch(value)) {
-    _msg = "Please provide a valid emal address";
+    _msg = "Please provide a valid email address";
     return _msg;
   }
   return _msg;

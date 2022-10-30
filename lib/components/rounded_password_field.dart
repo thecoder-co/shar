@@ -5,10 +5,12 @@ import 'package:shar/constants.dart';
 class RoundedPasswordField extends StatefulWidget {
   final ValueChanged<String>? onChanged;
   final String? text;
+  final TextEditingController? controller;
   const RoundedPasswordField({
     Key? key,
     this.onChanged,
     this.text = 'password',
+    this.controller,
   }) : super(key: key);
 
   @override
@@ -20,10 +22,10 @@ class _RoundedPasswordFieldState extends State<RoundedPasswordField> {
   @override
   Widget build(BuildContext context) {
     return TextFieldContainer(
-      child: TextField(
+      child: TextFormField(
+        controller: widget.controller,
         obscureText: seen,
         onChanged: widget.onChanged,
-        onSubmitted: widget.onChanged,
         cursorColor: kPrimaryColor,
         decoration: InputDecoration(
           hintText: widget.text,

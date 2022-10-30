@@ -2,36 +2,31 @@ import 'package:flutter/material.dart';
 import 'package:shar/components/text_field_container.dart';
 import 'package:shar/constants.dart';
 
-class RoundedInputField extends StatefulWidget {
+class RoundedInputField extends StatelessWidget {
   final String? hintText;
   final IconData? icon;
   final ValueChanged<String>? onChanged;
-
+  final TextEditingController? controller;
   const RoundedInputField({
     Key? key,
     this.hintText,
     this.icon = Icons.person,
     this.onChanged,
+    this.controller,
   }) : super(key: key);
 
-  @override
-  _RoundedInputFieldState createState() => _RoundedInputFieldState();
-}
-
-class _RoundedInputFieldState extends State<RoundedInputField> {
-  @override
   Widget build(BuildContext context) {
     return TextFieldContainer(
-      child: TextField(
-        onChanged: widget.onChanged,
-        onSubmitted: widget.onChanged,
+      child: TextFormField(
+        onChanged: onChanged,
+        controller: controller,
         cursorColor: kPrimaryColor,
         decoration: InputDecoration(
           icon: Icon(
-            widget.icon,
+            icon,
             color: kPrimaryColor,
           ),
-          hintText: widget.hintText,
+          hintText: hintText,
           border: InputBorder.none,
         ),
       ),
