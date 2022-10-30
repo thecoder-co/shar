@@ -1,5 +1,5 @@
 class AppUrl {
-  static const String liveBaseURL = "https://kubool-clone-api.herokuapp.com";
+  static const String liveBaseURL = "https://shar-api.onrender.com";
   static const String localURL = "http://127.0.0.1:5000";
   static const String baseURL = localURL;
   static const String register = baseURL + "/register";
